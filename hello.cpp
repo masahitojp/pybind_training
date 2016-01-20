@@ -2,6 +2,18 @@
 #include <string>
 #include <iostream>
 
+#define self (*this) // !important
+
+
+const std::string output(const std::string str)
+{
+    std::cout << str << std::endl;
+
+    return str;
+}
+
+
+
 class SomeObject
 {
     int value;
@@ -12,34 +24,20 @@ public:
 
     const int get_value() const
     {
-        return this->value;
+        return self.value;
     }
 
     void set_value(const int x)
     {
-        this->value = x;
+        self.value = x;
     }
 };
-
-const std::string output(const std::string str)
-{
-    std::cout << str << std::endl;
-
-    return str;
-}
-
-
-int add(int i, int j) {
-    return i + j;
-}
 
 namespace py = pybind11;
 
 PYBIND11_PLUGIN(hello) {
     py::module m("hello", "pybind11 example plugin");
 
-    m.def("add", &add, "A function which adds two numbers",
-      py::arg("i") = 1, py::arg("j") = 2);
     m.def("output", &output, "output string");
 
     py::class_<SomeObject>(m, "SomeObject")
